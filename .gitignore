@@ -1,17 +1,16 @@
 # Python
 venv/
-backend/venv/
+venv_backup/
 __pycache__/
 *.py[cod]
 
 # Environment variables
 .env
-backend/.env
-frontend/.env
+**/.env
 
-# React
-frontend/node_modules/
-frontend/dist/
+# Node
+node_modules/
+dist/
 
 # IDE
 .vscode/
@@ -24,5 +23,5 @@ Thumbs.db
 # Logs
 *.log
 
-# Vector Stores
+# Vector stores
 backend/vectorstores/

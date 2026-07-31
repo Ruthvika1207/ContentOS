@@ -1,4 +1,47 @@
+import { useEffect, useState } from "react";
+import api from "../services/api";
+
 function Dashboard() {
+
+  const [campaignCount, setCampaignCount] = useState(0);
+  const [documentCount, setDocumentCount] = useState(0);
+
+  const userId = localStorage.getItem("user_id");
+  const workspaceId = localStorage.getItem("workspace_id");;
+
+  useEffect(() => {
+
+    fetchDashboard();
+
+  }, []);
+
+  const fetchDashboard = async () => {
+
+    try {
+
+      const campaignResponse = await api.get(
+        `/campaigns/${userId}`
+      );
+
+      setCampaignCount(
+        campaignResponse.data.length
+      );
+
+      const documentResponse = await api.get(
+        `/documents/${workspaceId}`
+      );
+
+      setDocumentCount(
+        documentResponse.data.length
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  };
 
   return (
 
@@ -28,7 +71,7 @@ function Dashboard() {
 
           <p className="text-4xl font-bold mt-3">
 
-            0
+            {campaignCount}
 
           </p>
 
@@ -44,7 +87,7 @@ function Dashboard() {
 
           <p className="text-4xl font-bold mt-3">
 
-            0
+            {documentCount}
 
           </p>
 
@@ -78,13 +121,13 @@ function Dashboard() {
 
         <div className="flex gap-4">
 
-          <button className="bg-indigo-600 text-white px-5 py-3 rounded-lg">
+          <button className="bg-indigo-600 text-white px-5 py-3 rounded-lg hover:bg-indigo-700">
 
             Generate Content
 
           </button>
 
-          <button className="bg-emerald-600 text-white px-5 py-3 rounded-lg">
+          <button className="bg-emerald-600 text-white px-5 py-3 rounded-lg hover:bg-emerald-700">
 
             Upload Knowledge
 

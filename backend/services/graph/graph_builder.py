@@ -132,8 +132,17 @@ def writer_node(state):
     print("\n========== Writer Node ==========")
 
     content = run_writer_agent(
+
+    state["topic"],
+
+    state["research"],
+
+    state["competitor_report"],
+
     state["strategy"],
+
     state["seo_report"]
+
 )
 
     state["content"] = content

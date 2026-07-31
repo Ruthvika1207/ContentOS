@@ -8,7 +8,7 @@ function BrandBrain() {
   const askQuestion = async () => {
     try {
       const response = await api.post("/chat", {
-        workspace_id: "fitness_workspace",
+        workspace_id: localStorage.getItem("workspace_id"),
         question,
       });
 

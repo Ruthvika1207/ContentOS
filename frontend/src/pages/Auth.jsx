@@ -17,6 +17,7 @@ function Auth() {
 
       if (isLogin) {
 
+        // Login
         const response = await api.post(
           "/login",
           {
@@ -32,9 +33,39 @@ function Auth() {
 
         localStorage.setItem(
           "user_id",
-           response.data.user_id
+          response.data.user_id
         );
 
+        // Check if workspace exists
+        const workspaceResponse = await api.get(
+          `/workspace/${response.data.user_id}`
+        );
+
+        if (workspaceResponse.data.exists) {
+
+          localStorage.setItem(
+            "workspace_id",
+            workspaceResponse.data.workspace.id
+          );
+
+        } else {
+
+          // Create default workspace
+          const createWorkspace = await api.post(
+            "/workspace",
+            {
+              user_id: response.data.user_id,
+              name: "My Workspace",
+              description: "Default Workspace"
+            }
+          );
+
+          localStorage.setItem(
+            "workspace_id",
+            createWorkspace.data.workspace_id
+          );
+
+        }
 
         navigate("/");
 
@@ -58,6 +89,8 @@ function Auth() {
 
     } catch (error) {
 
+      console.error(error);
+
       alert(
         isLogin
           ? "Login Failed"
@@ -75,7 +108,9 @@ function Auth() {
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
 
         <h1 className="text-3xl font-bold text-indigo-600 mb-6 text-center">
+
           ContentOS
+
         </h1>
 
         <input
@@ -99,9 +134,11 @@ function Auth() {
 
         <button
           onClick={handleSubmit}
-          className="w-full bg-indigo-600 text-white py-3 rounded"
+          className="w-full bg-indigo-600 text-white py-3 rounded hover:bg-indigo-700"
         >
+
           {isLogin ? "Login" : "Sign Up"}
+
         </button>
 
         <p
@@ -110,9 +147,11 @@ function Auth() {
             setIsLogin(!isLogin)
           }
         >
+
           {isLogin
             ? "Don't have an account? Sign Up"
             : "Already have an account? Login"}
+
         </p>
 
       </div>
@@ -120,6 +159,7 @@ function Auth() {
     </div>
 
   );
+
 }
 
 export default Auth;

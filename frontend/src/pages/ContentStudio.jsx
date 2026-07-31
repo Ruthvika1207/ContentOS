@@ -19,66 +19,47 @@ function ContentStudio() {
 
   const generate = async () => {
 
-    try {
+  try {
 
-      setLoading(true);
+    setLoading(true);
 
-      const workspace_id =
-        "fitness_workspace";
+    const workspace_id = localStorage.getItem(
+      "workspace_id"
+    );
 
-      const researchResponse =
-        await api.post(
-          "/research",
-          {
-            workspace_id,
-            topic
-          }
-        );
+    const response = await api.post(
+      "/generate-package",
+      {
+        workspace_id,
+        topic
+      }
+    );
 
-      setResearch(
-        researchResponse.data.report
-      );
+    setResearch(
+      response.data.research
+    );
 
-      const strategyResponse =
-        await api.post(
-          "/strategy",
-          {
-            workspace_id,
-            topic
-          }
-        );
+    setStrategy(
+      response.data.strategy
+    );
 
-      setStrategy(
-        strategyResponse.data.strategy
-      );
+    setContent(
+      response.data.edited_content
+    );
 
-      const writerResponse =
-        await api.post(
-          "/writer",
-          {
-            workspace_id,
-            topic
-          }
-        );
+  } catch (error) {
 
-      setContent(
-        writerResponse.data.content
-      );
+    console.error(error);
 
-    } catch (error) {
+    alert("Generation Failed");
 
-      console.error(error);
+  } finally {
 
-      alert(
-        "Generation Failed"
-      );
+    setLoading(false);
 
-    } finally {
+  }
 
-      setLoading(false);
-
-    }
-  };
+};
 
   return (
 

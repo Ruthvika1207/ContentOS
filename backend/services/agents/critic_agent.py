@@ -1,32 +1,51 @@
 from services.rag.rag_chain import model
 
 
-def run_critic_agent(strategy):
+def run_critic_agent(content):
 
     prompt = f"""
-You are a senior AI marketing reviewer.
+You are a Senior Marketing Quality Reviewer.
 
-Review the following marketing strategy.
+Review the following generated marketing content.
 
-Evaluate:
+==================================================
+CONTENT
+==================================================
 
-1. Is it complete?
-2. Is it actionable?
-3. Is it specific?
-4. Does it have clear target audience?
-5. Does it have measurable goals?
+{content}
 
-Respond with ONLY one word.
+Evaluate the content on:
+
+1. Readability
+2. Marketing effectiveness
+3. SEO optimization
+4. Call-to-Action
+5. Brand consistency
+6. Grammar
+7. Professional tone
+
+Internally give the content a score out of 10.
+
+Decision Rules:
+
+- Score >= 7 → GOOD
+- Score < 7 → BAD
+
+Be practical.
+
+Do NOT reject content for small improvements.
+
+Reject ONLY if the content is incomplete,
+poorly written,
+or unusable.
+
+Return ONLY ONE WORD:
 
 GOOD
 
 or
 
 BAD
-
-Strategy:
-
-{strategy}
 """
 
     response = model.generate_content(prompt)

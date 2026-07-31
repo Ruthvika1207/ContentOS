@@ -7,52 +7,72 @@ def run_strategy_agent(
 ):
 
     prompt = f"""
-You are a senior marketing strategist.
+You are a Senior Marketing Strategist.
 
-Your task is to create a complete marketing strategy.
+Your job is to create a practical, actionable marketing strategy.
 
-Use BOTH:
+The Market Research Report already contains insights from the company's Brand Brain
+including its mission, vision, products, audience, brand voice and business goals.
 
-1. Market Research
-2. Competitor Analysis
+Also use the Competitor Analysis to differentiate the company.
 
-Market Research:
+==============================
+MARKET RESEARCH
+==============================
 
 {research_report}
 
-
-Competitor Analysis:
+==============================
+COMPETITOR ANALYSIS
+==============================
 
 {competitor_report}
 
+Create a professional marketing strategy with the following sections:
 
-Generate a structured strategy.
+1. Executive Summary
 
-Include:
+2. Target Audience
+   - Primary audience
+   - Secondary audience
+   - Customer pain points
 
-1. Target Audience
+3. Brand Positioning
+   - Positioning statement
+   - Value proposition
 
-2. Brand Positioning
+4. Unique Selling Proposition (USP)
 
-3. Content Pillars
+5. Content Pillars
+   - Educational
+   - Promotional
+   - Community
+   - Thought Leadership
 
-4. Unique Selling Points
+6. Marketing Channels
+   - LinkedIn
+   - Instagram
+   - Email
+   - Blog
+   - YouTube (if relevant)
 
-5. Competitive Advantages
+7. Competitive Advantages
 
-6. 30-Day Content Calendar
+8. 30-Day Content Plan
 
-7. Marketing Channels
+9. Growth Opportunities
 
-8. Growth Opportunities
+10. Recommended Next Steps
 
-9. Recommended Actions
+Requirements:
 
-The strategy should clearly differentiate the brand from its competitors.
+- Align the strategy with the brand identity from the research.
+- Differentiate from competitors.
+- Keep recommendations realistic and actionable.
+- Explain WHY each recommendation is made.
+- Return only the strategy.
 """
 
-    response = model.generate_content(
-        prompt
-    )
+    response = model.generate_content(prompt)
 
     return response.text

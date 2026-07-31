@@ -2,53 +2,69 @@ from services.rag.rag_chain import model
 
 
 def run_writer_agent(
+
+    topic,
+
+    research,
+
+    competitor,
+
     strategy,
-    seo_report
+
+    seo
+
 ):
 
     prompt = f"""
-You are an expert marketing content writer.
+You are a senior content marketing specialist.
 
-Your task is to create high-quality marketing content.
+Use ALL the information below to create high-quality marketing assets.
 
-Use BOTH:
+Research Report
+----------------
+{research}
 
-1. Marketing Strategy
+Competitor Insights
+----------------
+{competitor}
 
-2. SEO Recommendations
-
-------------------------------------------------
-
-Marketing Strategy:
-
+Marketing Strategy
+----------------
 {strategy}
 
-------------------------------------------------
+SEO Recommendations
+----------------
+{seo}
 
-SEO Recommendations:
+Topic
+----------------
+{topic}
 
-{seo_report}
+Create:
 
-------------------------------------------------
+1. 3 LinkedIn Posts
 
-Generate:
+2. 3 Instagram Captions
 
-1. Three LinkedIn Posts
+3. SEO Blog Article
 
-2. Three Instagram Captions
-
-3. One SEO Optimized Blog Article
-
-4. One Marketing Email
+4. Marketing Email
 
 Requirements:
 
-- Follow the marketing strategy.
-- Naturally include the primary and secondary keywords.
-- Use the suggested hashtags where appropriate.
-- Maintain a consistent brand voice.
-- Include strong call-to-actions.
-- Make the blog SEO-friendly with headings.
+• Follow the strategy.
+
+• Differentiate from competitors.
+
+• Include SEO naturally.
+
+• Keep the brand voice consistent.
+
+• Use research insights.
+
+• Include strong CTAs.
+
+Return only the content.
 """
 
     response = model.generate_content(

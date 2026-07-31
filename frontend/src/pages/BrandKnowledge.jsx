@@ -8,7 +8,7 @@ function BrandKnowledge() {
   const [pdfFile, setPdfFile] = useState(null);
   const [documents, setDocuments] = useState([]);
 
-  const workspaceId = "fitness_workspace";
+  const workspaceId = localStorage.getItem("workspace_id");;
 
   useEffect(() => {
     fetchDocuments();

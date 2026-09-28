@@ -17,14 +17,6 @@ from routes.campaign import router as campaign_router
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origin_regex=".*",
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 app.include_router(pdf_router)
 app.include_router(chat_router)
 app.include_router(auth_router)
@@ -46,3 +38,11 @@ app.include_router(
 @app.get("/")
 def home():
     return {"message": "ContentOS Backend Running"}
+
+app = CORSMiddleware(
+    app=app,
+    allow_origin_regex=".*",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

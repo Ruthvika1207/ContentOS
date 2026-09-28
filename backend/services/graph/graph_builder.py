@@ -31,16 +31,24 @@ from services.agents.editor_agent import (
 # Research Node
 # -----------------------------
 
+
 def research_node(state):
 
     print("\n========== Research Node ==========")
 
-    research = run_research_agent(
+    result = run_research_agent(
         state["workspace_id"],
         state["topic"]
     )
 
-    state["research"] = research
+    # Store the generated research report
+    state["research"] = result["research_report"]
+
+    # Store the original retrieved PDF text
+    state["brand_sources"] = result["brand_sources"]
+
+    print("Research report generated.")
+    print("Original brand sources stored.")
 
     return state
 
@@ -87,22 +95,22 @@ def strategy_node(state):
 
 def decide_next(state):
 
-    if state["critic_result"] == "GOOD":
+    result = state["critic_result"]
+
+    if result["verdict"] == "GOOD":
+        state["needs_revision"] = False
         return END
 
     state["retry_count"] += 1
 
-    print(
-        f"Retry Attempt: {state['retry_count']}"
-    )
+    print(f"Retry Attempt: {state['retry_count']}")
 
     if state["retry_count"] >= state["max_retries"]:
-
         print("Maximum retries reached.")
-
+        state["needs_revision"] = True
         return END
 
-    return "research"
+    return "writer"
 
 
 
@@ -132,18 +140,13 @@ def writer_node(state):
     print("\n========== Writer Node ==========")
 
     content = run_writer_agent(
-
-    state["topic"],
-
-    state["research"],
-
-    state["competitor_report"],
-
-    state["strategy"],
-
-    state["seo_report"]
-
-)
+        state["topic"],
+        state["research"],
+        state["competitor_report"],
+        state["strategy"],
+        state["seo_report"],
+        state.get("critic_feedback", [])
+    )
 
     state["content"] = content
 
@@ -164,19 +167,28 @@ def editor_node(state):
 
 
 
+
 def critic_node(state):
 
     print("\n========== Critic Agent ==========")
 
     result = run_critic_agent(
-        state["edited_content"]
+        state["edited_content"],
+        state.get("brand_sources", ""),
+        state["topic"]
     )
 
     state["critic_result"] = result
+    state["critic_feedback"] = result["issues"]
 
     state["needs_revision"] = (
-        result == "BAD"
+        result["verdict"] != "GOOD"
     )
+
+    print("Critic verdict:", result["verdict"])
+
+    if result["issues"]:
+        print("Critic feedback:", result["issues"])
 
     return state
 
@@ -265,7 +277,7 @@ builder.add_conditional_edges(
 
     {
 
-        "research": "research",
+        "writer": "writer",
 
         END: END
 

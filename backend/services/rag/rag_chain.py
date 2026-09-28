@@ -27,18 +27,25 @@ def ask_rag(workspace_id, question):
     )
 
     prompt = f"""
-You are a helpful content assistant.
+    You are a helpful brand knowledge assistant.
 
-Use only the provided context.
+    Answer the question using ONLY the provided context.
 
-Context:
-{context}
+    Do not use outside knowledge to fill missing information.
+    Do not invent facts or product features.
 
-Question:
-{question}
+    If the context does not contain the answer,
+    say that the information is not available
+    in the uploaded brand knowledge.
 
-Answer:
-"""
+    Context:
+    {context}
+
+    Question:
+    {question}
+
+    Answer:
+    """
 
     response = model.generate_content(
         prompt

@@ -1,3 +1,4 @@
+
 from services.graph.graph_builder import graph
 
 
@@ -7,28 +8,29 @@ def run_langgraph_workflow(
 ):
 
     state = {
+        "workspace_id": workspace_id,
+        "topic": topic,
 
-    "workspace_id": workspace_id,
+        "research": "",
+        "brand_sources": "",  # ADDED
 
-    "topic": topic,
+        "competitor_report": "",
+        "strategy": "",
+        "seo_report": "",
 
-    "research": "",
+        "content": "",
+        "edited_content": "",
+        "published_content": "",
 
-    "strategy": "",
+        "critic_result": {},
+        "critic_feedback": [],
 
-    "content": "",
+        "needs_revision": False,
 
-    "critic_result": "",
+        "retry_count": 0,
+        "max_retries": 1
+    }
 
-    "needs_revision": False,
-
-    "retry_count": 0,
-
-    "max_retries": 2
-}
-
-    result = graph.invoke(
-        state
-    )
+    result = graph.invoke(state)
 
     return result
